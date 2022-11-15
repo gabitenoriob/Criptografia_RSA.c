@@ -2,6 +2,21 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+
+int entradaPadrao(int n, int e)
+{
+    //tornar entrada padrao, quando receber a frase, transformar todas as letras maiusculas.
+    char caractere; 
+    caractere = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ');
+    numeros = (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28);
+    
+}
+
+int inverso()
+{
+    
+}
+
 long int mdc(long int x,long int y)
 {
     if( y == 0) 
