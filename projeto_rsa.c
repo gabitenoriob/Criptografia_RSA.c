@@ -3,21 +3,41 @@
 #include <math.h>
 #include <stdlib.h>
 
-int entradaPadrao(int n, int e)
-{
-    //tornar entrada padrao, quando receber a frase, transformar todas as letras maiusculas.
-    char caractere; 
-    caractere = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ');
-    numeros = (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28);
+char alfabeto[27] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' '};
+long long int inverso_modular(long long int m, long long int e, long long int n)
+{ //texto cifrado = (textoplano ^ E) mod N , c = m ^ e % n
     
-}
+    long long int c = 1;
 
-int inverso()
+    if(n == 1)
+    {
+      return 0;
+    }
+
+    for(long long int i = 0; i < e; i++)
+    {
+      c = (c * m) % n;
+    }
+
+    return c;
+}
+long long int conversao(char frase[], long long int tamanho, long long int i, long long int j, long long int e, long long int n)
 {
-    
+    if(j > 27)
+    {
+        return 0;
+    }
+    if(frase[i] == alfabeto[j])
+    {
+        long long int texto_plano = j;
+        return inverso_modular(texto_plano,e,n);
+    }
+    else
+    {
+        conversao(frase,tamanho,i,j + 1,e,n);
+    }
 }
-
-long int mdc(long int x,long int y)
+long long int mdc(long int x,long int y)
 {
     if( y == 0) 
     {
@@ -28,7 +48,7 @@ long int mdc(long int x,long int y)
         return mdc(y, (x % y));
     }
 }
-long int primos(long int n,int contador)
+long long int primos(long int n,int contador)
 {
     if(n == contador) 
     {
@@ -43,21 +63,22 @@ long int primos(long int n,int contador)
         primos(n,contador + 1);
     }
 }
-void chavesp()
+void chavepublica()
 {
-    long int p, q, e;
+    long long int p, q, e;
     printf("Por favor digite os valores de 'p', 'q', e 'e'\n");
-    scanf("%ld%ld%ld", &p, &q, &e);
+    scanf("%lld%lld%lld", &p, &q, &e);
 
     //p e q precisam ser primos e e precisa ser um relativamente primo a (p -1) * (q - 1)
 
-    long int coprimos = (p-1) * (q-1); //mdc = 1
+    long long int n = p * q;
+    long long int z = (p-1) * (q-1); 
 
     int invalido = 0;
 
     while (!invalido)
     {
-        if(primos(p,2) == 0 || primos(q,2) == 0 || mdc(coprimos,e) != 1 )
+        if(primos(p,2) == 0 || primos(q,2) == 0 || mdc(z,e) != 1 )
         {
             printf("Valores inválidos, tente novamente\n");
             return;
@@ -67,17 +88,17 @@ void chavesp()
             printf("Valor válido, vamos começar...\n");
             printf("Salvo em 'chaves_pulblicas.txt'\n");
             FILE *chaves;
-            int abrirfechar;
-            chaves = fopen("chaves_pulblicas.txt","abrirfechar");
-            fprintf(chaves, "%ld%ld", p * q, e); //par(n,e)
+            int w;
+            chaves = fopen("chaves_pulblicas.txt","w");
+            fprintf(chaves, "%lld %lld", n, e); //par(n,e)
             fclose(chaves);
 
             printf("Se quiser ver os resultados na tela DIGITE 1, caso não DIGITE 0\n");
-            scanf("%d", &abrirfechar);
+            scanf("%d", &w);
 
-            if(abrirfechar == 1)
+            if(w == 1)
             {
-                printf("Essa é sua chave pública:\n n = %ld\ne = %ld\n", p * q, e); //par(n,e)
+                printf("Essa é sua chave pública:\nn = %lld\ne = %lld\n",n, e); //par(n,e)
                 printf("Encerra-se aqui a criação da sua chave pública\n\n");
             }
 
@@ -86,6 +107,70 @@ void chavesp()
         }
     }
     
+
+}
+void encriptografar()
+{
+    long long int n, e;
+    int w;
+    FILE *mensagens;
+    mensagens = fopen("mensagem_criptografada.txt", "w");
+
+    printf("Por favor digite seus valores (chave pública) de 'n' e 'e'\n");
+    scanf("%lld%lld", &n, &e);
+
+
+    char frase[1000000];
+    printf("\nDigite a frase que deja criptografar:\nobs: utilize apenas letras MAIUSCULAS\n");
+    scanf(" %[^\n]s", frase);
+
+
+    //para cada letra(q ja é um numero inteiro) deve encontrar o equivalente cifrado 
+
+    long long int tamanho = strlen(frase);
+    long long int i = 0;
+    long long int cifrado[10000]; 
+
+
+    while(i < tamanho)
+    {
+        cifrado[i] = conversao(frase,tamanho,i,0,e,n);
+        //printf("ta cifrando isso:%lld\n", cifrado[i]);
+        fprintf(mensagens,"%lld", cifrado[i] );
+        i++;
+    }    
+
+    printf("Se quiser ver os resultados na tela DIGITE 1, caso não DIGITE 0\n");
+            scanf("%d", &w);
+
+            if(w == 1)
+            {
+                printf("Essa é sua mensagem criptografada: ");
+                for(i = 0; i < tamanho; i ++)
+                {
+                printf("%lld",cifrado[i] ); 
+                }
+                printf("\n");
+            }
+    printf("Mensagem Criptografada com sucesso e salva no arquivo txt ""mensagem_criptografada""\n\n");
+    printf("Encerra-se aqui a criação da mensagem criptografada\n\n");
+    fclose(mensagens);
+
+
+}
+void descriptografar()
+{// textoplano =(textocifrado ^  D) mod N
+
+    long long int p, q, e;
+    printf("Por favor digite seus valores  'p', 'q', e 'e'\n");
+    scanf("%lld%lld%lld", &p, &q, &e);
+
+    long long int z = (p-1) * (q-1); 
+    long long int chave_privada = inverso(e,z);
+    // d = inverso multiplicativo de e E * D MOD Z = 1
+
+   
+
 
 }
 int main()
@@ -103,17 +188,19 @@ int main()
        if(escolha == 1)
        {
         printf("GERANDO CHAVES PUBLICAS\n\n");
-        chavesp();
+        chavepublica();
        }
        if(escolha == 2)
        {
         printf("CRIPTOGRAFANDO\n\n");
-        //criptografar();
+        encriptografar(); 
+       
        }
        if(escolha == 3)
        {
         printf("DESCRIPTOGRAFANDO\n\n");
-        //descriptografar();
+        descriptografar();
+        // textoplano =(textocifrado ^  D) mod N
        }
        if(escolha == 4)
        {
