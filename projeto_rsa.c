@@ -4,7 +4,19 @@
 #include <stdlib.h>
 
 char alfabeto[27] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' '};
-long long int inverso_modular(long long int m, long long int e, long long int n)
+long long int inverso(long long int e, long long int z)
+{
+    long long int d= 1; //chave privada = d
+    for(long long int aux = 0; aux < z; aux++)
+    {
+        if((aux * e) % z == 1)
+        {
+            d = aux  ;
+            return d;
+        }
+    }
+}
+long long int inverso_modular(long long int m, long long int expoente, long long int n)
 { //texto cifrado = (textoplano ^ E) mod N , c = m ^ e % n
     
     long long int c = 1;
@@ -14,7 +26,7 @@ long long int inverso_modular(long long int m, long long int e, long long int n)
       return 0;
     }
 
-    for(long long int i = 0; i < e; i++)
+    for(long long int i = 0; i < expoente; i++)
     {
       c = (c * m) % n;
     }
@@ -136,7 +148,7 @@ void encriptografar()
     {
         cifrado[i] = conversao(frase,tamanho,i,0,e,n);
         //printf("ta cifrando isso:%lld\n", cifrado[i]);
-        fprintf(mensagens,"%lld", cifrado[i] );
+        fprintf(mensagens,"%lld", cifrado[i]);
         i++;
     }    
 
@@ -168,6 +180,42 @@ void descriptografar()
     long long int z = (p-1) * (q-1); 
     long long int chave_privada = inverso(e,z);
     // d = inverso multiplicativo de e E * D MOD Z = 1
+
+    FILE *chavepriv;
+    int w;
+    chavepriv = fopen("chave_privada.txt","w");
+    fprintf(chavepriv, "%lld", chave_privada); 
+    fclose(chavepriv);
+
+    printf("Se quiser ver sua chave privada na tela DIGITE 1, caso não DIGITE 0\n");
+    scanf("%d", &w);
+
+    if(w == 1)
+    {
+        printf("Essa é sua chave privada:\nd = %lld\n",chave_privada); 
+    }
+
+    long long int msg_cifrada;
+    printf("Digite sua mensagem criptografa que foi salva no arquivo ""mensagem_criptografrada.txt""\n");
+    scanf("%lld", &msg_cifrada);
+
+    long long int msg_pura = inverso_modular(msg_cifrada,chave_privada,p * q);
+
+    for(int j = 0; j < 27; j++)
+    {
+        if(msg_pura  = j)
+        {
+            char msg_descriptografada = alfabeto[j];
+            printf("Essa é sua mensagem original: %c\n", msg_descriptografada);
+            j = 28;
+        }
+         
+    }
+
+
+
+
+    
 
    
 
