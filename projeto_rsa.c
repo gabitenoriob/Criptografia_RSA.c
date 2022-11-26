@@ -18,6 +18,7 @@ long long int inverso(long long int e, long long int z)
 }
 long long int inverso_modular(long long int m, long long int expoente, long long int n)
 { //texto cifrado = (textoplano ^ E) mod N , c = m ^ e % n
+//// textoplano =(textocifrado ^  D) mod N, c = m ^ d % n
     
     long long int c = 1;
 
@@ -171,8 +172,7 @@ void encriptografar()
 
 }
 void descriptografar()
-{// textoplano =(textocifrado ^  D) mod N
-
+{
     long long int p, q, e;
     printf("Por favor digite seus valores  'p', 'q', e 'e'\n");
     scanf("%lld%lld%lld", &p, &q, &e);
@@ -186,6 +186,7 @@ void descriptografar()
     chavepriv = fopen("chave_privada.txt","w");
     fprintf(chavepriv, "%lld", chave_privada); 
     fclose(chavepriv);
+    long long int mensagem[10000];
 
     printf("Se quiser ver sua chave privada na tela DIGITE 1, caso não DIGITE 0\n");
     scanf("%d", &w);
@@ -194,23 +195,53 @@ void descriptografar()
     {
         printf("Essa é sua chave privada:\nd = %lld\n",chave_privada); 
     }
+// rever abaixo 
+/*
 
-    long long int msg_cifrada;
-    printf("Digite sua mensagem criptografa que foi salva no arquivo ""mensagem_criptografrada.txt""\n");
-    scanf("%lld", &msg_cifrada);
 
-    long long int msg_pura = inverso_modular(msg_cifrada,chave_privada,p * q);
+    FILE * msg_crip ;
+    msg_crip = fopen("mensagem_criptografada", "r");
+    long long int i ;
 
-    for(int j = 0; j < 27; j++)
+    for( i = 0 ; !feof(msg_crip) ; i++)
     {
-        if(msg_pura  = j)
-        {
-            char msg_descriptografada = alfabeto[j];
-            printf("Essa é sua mensagem original: %c\n", msg_descriptografada);
-            j = 28;
-        }
-         
+      fscanf(msg_crip,"%lld", &mensagem[i]);
     }
+
+    long long int tamanho = i;
+    for(i = 0 ; i < tamanho ; i++)
+    {
+      mensagem[i] = inverso_modular(mensagem[i], chave_privada, p * q);
+    }
+
+    FILE * msg_descrip;
+    msg_descrip = fopen("mensagem_descriptografada.txt", "w");
+    char msg_pura[10000];
+
+    for( i = 0 ; i < tamanho ; i++)
+    {
+      msg_pura[i] = alfabeto[mensagem[i]];
+      fprintf(msg_descrip, "%c", msg_pura[i]);
+    }
+    fclose(msg_descrip);
+
+    printf("Essa é sua mensagem descriptografada: ");
+
+    for( i = 0 ; i < tamanho ; i++)
+    {
+      msg_pura[i] = alfabeto[mensagem[i]];
+      printf("%c", msg_pura[i]);
+    }
+
+*/
+
+  
+  
+   
+    
+   }
+   
+   
 
 
 
@@ -220,7 +251,7 @@ void descriptografar()
    
 
 
-}
+
 int main()
 {
 
