@@ -134,7 +134,7 @@ void encriptografar()
 
 
     char frase[1000000];
-    printf("\nDigite a frase que deja criptografar:\nobs: utilize apenas letras MAIUSCULAS\n");
+    printf("\nDigite a frase que deseja criptografar:\nobs: utilize apenas letras MAIUSCULAS\n");
     scanf(" %[^\n]s", frase);
 
 
