@@ -3,30 +3,16 @@
 #include <math.h>
 #include <stdlib.h>
 
-char alfabeto[27] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' '};
-/*long long int conversao_letra(long long int letras[], long long int tamanho)
-{
-  
-    for (long long int i = 0; i < tamanho; i ++)
-    {
-         printf("essa letra q ta vindo%lld",letras[i]);
-    for(int j = 0; j <= 27; j++)
-    {
-        if(letras[i] == j)
-        {
-           printf("%s", alfabeto[j]);
-        }
-    }
-    }
-}*/
+char alfabeto[28] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' '};
 long long int inverso(long long int e, long long int z)
 {
     long long int d= 1; //chave privada = d
-    for(long long int aux = 0; aux < z; aux++)
+    long long int aux;
+    for(aux = 0; aux < z; aux++)
     {
         if((aux * e) % z == 1)
         {
-            d = aux  ;
+            d = aux;
             return d;
         }
     }
@@ -36,21 +22,27 @@ long long int inverso_modular(long long int m, long long int expoente, long long
 //// textoplano =(textocifrado ^  D) mod N, c = m ^ d % n
     
     long long int c = 1;
+    long long int i;
 
     if(n == 1)
     {
       return 0;
     }
 
-    for(long long int i = 0; i < expoente; i++)
+    for(i= 0; i < expoente; i++)
     {
       c = (c * m) % n;
+    }
+    
+    if(m == 26){
+        c = 26;
     }
 
     return c;
 }
 long long int conversao(char frase[], long long int tamanho, long long int i, long long int j, long long int e, long long int n)
-{
+{//mudar p for
+
     if(j > 27)
     {
         return 0;
@@ -140,7 +132,7 @@ void chavepublica()
 void encriptografar()
 {
     long long int n, e;
-    int w;
+    int w, j;
     FILE *mensagens;
     mensagens = fopen("mensagem_criptografada.txt", "w");
 
@@ -152,19 +144,18 @@ void encriptografar()
     printf("\nDigite a frase que deja criptografar:\nobs: utilize apenas letras MAIUSCULAS\n");
     scanf(" %[^\n]s", frase);
 
-
     //para cada letra(q ja é um numero inteiro) deve encontrar o equivalente cifrado 
 
     long long int tamanho = strlen(frase);
     long long int i = 0;
     long long int cifrado[10000]; 
 
-
+//ta cifrando erradooo
     while(i < tamanho)
     {
         cifrado[i] = conversao(frase,tamanho,i,0,e,n);
         //printf("ta cifrando isso:%lld\n", cifrado[i]);
-        fprintf(mensagens,"%lld ", cifrado[i]);
+        fprintf(mensagens,"%lld", cifrado[i]);
         i++;
     }    
 
@@ -198,26 +189,27 @@ void descriptografar()
     scanf("%lld%lld%lld", &p, &q, &e);
     z = (p - 1) * (q - 1);
     d = inverso(e, z);
-
+    
     for(i = 0 ; !feof(msg_aux) ; i++)
     {
-      fscanf(msg_aux,"%lld ", &mensagem[i]);
+      fscanf(msg_aux,"%lld", &mensagem[i]);
     }
 
     tamanho = i;
     for(i = 0 ; i < tamanho ; i++)
     {
       mensagem[i] = inverso_modular(mensagem[i], d, p * q);
+      printf("esse é o inverso modular %lld", mensagem[i]);
     }
 
     msg_descrip = fopen("mensagem_descriptografada.txt", "w");
     for(i = 0 ; i < tamanho ; i++)
     {
       a[i] = alfabeto[mensagem[i]];
+      printf("conversao p letra: %c", a[i]);
       fprintf(msg_descrip, "%c", a[i]);
     }
     fclose(msg_descrip);
-
     printf("Mensagem descriptografada! Salva em 'mensagem_descriptografada.txt'.\n\n");
     printf("Deseja mostrar mensagem na tela?\nDigite 1 para mostrar e 0 para sair.\n");
 
