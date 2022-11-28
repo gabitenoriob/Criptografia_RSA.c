@@ -86,7 +86,7 @@ long long int primos(long int n,int contador)
 void chavepublica()
 {
     long long int p, q, e;
-    printf("Por favor digite os valores de 'p', 'q', e 'e'\n");
+    printf("Por favor digite os valores de 'p', 'q', e 'e'\nOBS: maiores que 3 e menores que 20000 por gentileza ;)\n\n");
     scanf("%lld%lld%lld", &p, &q, &e);
 
     //p e q precisam ser primos e e precisa ser um relativamente primo a (p -1) * (q - 1)
@@ -98,7 +98,7 @@ void chavepublica()
 
     while (!invalido)
     {
-        if(primos(p,2) == 0 || primos(q,2) == 0 || mdc(z,e) != 1 )
+        if(primos(p,2) == 0 || primos(q,2) == 0 || mdc(z,e) != 1 || p <= 2 || q <= 2 || e <= 2 )
         {
             printf("Valores inválidos, tente novamente\n");
             return;
@@ -164,12 +164,12 @@ void encriptografar()
 
             if(w == 1)
             {
-                printf("Essa é sua mensagem criptografada: ");
+                printf("\n\nEssa é sua mensagem criptografada: ");
                 for(i = 0; i < tamanho; i ++)
                 {
                 printf("%lld ",cifrado[i] ); 
                 }
-                printf("\n");
+                printf("\n\n");
             }
     printf("Mensagem Criptografada com sucesso e salva no arquivo txt ""mensagem_criptografada""\n\n");
     printf("Encerra-se aqui a criação da mensagem criptografada\n\n");
@@ -210,18 +210,21 @@ void descriptografar()
     }
     fclose(msg_descrip);
     printf("Mensagem descriptografada! Salva em 'mensagem_descriptografada.txt'.\n\n");
-    printf("Deseja mostrar mensagem na tela?\nDigite 1 para mostrar e 0 para sair.\n");
+    printf("Deseja mostrar mensagem na tela?\nDigite 1 para mostrar e 0 para sair.\n\n");
 
     int w;
     scanf("%d", &w);
     if(w == 1)
     {
+        printf("\n\nEssa é sua mensagem original: ");
       for(i = 0 ; i < tamanho - 1; i++)
       {
         printf("%c", a[i]);
       }
-      printf("\n");
+      printf("\n\n");
     }
+
+    printf("Encerra-se aqui a criação da mensagem descriptografada\n\n");
 }
 int main()
 {
