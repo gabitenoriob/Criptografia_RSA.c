@@ -3,8 +3,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-char alfabeto[27] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' '};
-/*long long int conversao_letra(long long int letras[], long long int tamanho)
+char alfabeto[26] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' '};
+long long int conversao_letra(long long int letras[], long long int tamanho)
 {
   
     for (long long int i = 0; i < tamanho; i ++)
@@ -18,7 +18,7 @@ char alfabeto[27] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O'
         }
     }
     }
-}*/
+}
 long long int inverso(long long int e, long long int z)
 {
     long long int d= 1; //chave privada = d
@@ -188,49 +188,70 @@ void encriptografar()
 }
 void descriptografar()
 {
-    long long int d, i, tamanho, p, q, e, z;
+    long long int d, p, q, e, z;
     long long int mensagem[100000];
-    char a[100000];
-    FILE *msg_aux, *msg_descrip;
-    msg_aux = fopen("mensagem_criptografada.txt", "rt");
-
     printf("Digite os valores de 'p', 'q', 'e':\n");
     scanf("%lld%lld%lld", &p, &q, &e);
     z = (p - 1) * (q - 1);
     d = inverso(e, z);
+    FILE * msg_descrip;
+    msg_descrip = fopen("mensagem_descriptografada", "w");
+    char msg_cif[100000];
+    printf("Digite sua mensagem criptografada(números):\n");
+    long long int i = 0;
+    scanf("%s", msg_cif);
+    long long int msg_cifrada = atoll(msg_cif);
+    long long int msg_pura;
+    msg_pura =  inverso_modular(msg_cifrada,d,p * q);//4
+    //printf("MSG PURA %lld\n", msg_pura);
+    char msg_letras[100000];
+    sprintf(msg_letras,"%lld",msg_pura);
 
-    for(i = 0 ; !feof(msg_aux) ; i++)
+    long long int tamanho = strlen(msg_letras);
+    //printf("TAMANHO  %lld\n", tamanho);
+    for(i = 0; i < tamanho; i++)
     {
-      fscanf(msg_aux,"%lld ", &mensagem[i]);
+        if(msg_letras[i] == '0'){printf("A");fprintf(msg_descrip,"%c","A");}
+        if(msg_letras[i] == '1'){printf("B");}
+        if(msg_letras[i] == '2'){printf("C");}
+        if(msg_letras[i] == '3'){printf("D");}
+        if(msg_letras[i] == '4'){printf("E");}
+        if(msg_letras[i] == '5'){printf("F");}
+        if(msg_letras[i] == '6'){printf("G");}
+        if(msg_letras[i] == '7'){printf("H");}
+        if(msg_letras[i] == '8'){printf("I");}
+        if(msg_letras[i] == '9'){printf("J");}
+        if(msg_letras[i] == '10'){printf("K");}
+        if(msg_letras[i] == '11'){printf("L");}
+        if(msg_letras[i] == '12'){printf("M");}
+        if(msg_letras[i] == '13'){printf("N");}
+        if(msg_letras[i] == '14'){printf("O");}
+        if(msg_letras[i] == '15'){printf("P");}
+        if(msg_letras[i] == '16'){printf("Q");}
+        if(msg_letras[i] == '17'){printf("R");}
+        if(msg_letras[i] == '18'){printf("S");}
+        if(msg_letras[i] == '19'){printf("T");}
+        if(msg_letras[i] == '20'){printf("U");}
+        if(msg_letras[i] == '21'){printf("V");}
+        if(msg_letras[i] == '22'){printf("W");}
+        if(msg_letras[i] == '23'){printf("X");}
+        if(msg_letras[i] == '24'){printf("Y");}
+        if(msg_letras[i] == '25'){printf("Z");}
+        if(msg_letras[i] == '26'){printf(" ");}
+
+
     }
 
-    tamanho = i;
-    for(i = 0 ; i < tamanho ; i++)
-    {
-      mensagem[i] = inverso_modular(mensagem[i], d, p * q);
-    }
 
-    msg_descrip = fopen("mensagem_descriptografada.txt", "w");
-    for(i = 0 ; i < tamanho ; i++)
-    {
-      a[i] = alfabeto[mensagem[i]];
-      fprintf(msg_descrip, "%c", a[i]);
-    }
-    fclose(msg_descrip);
 
-    printf("Mensagem descriptografada! Salva em 'mensagem_descriptografada.txt'.\n\n");
-    printf("Deseja mostrar mensagem na tela?\nDigite 1 para mostrar e 0 para sair.\n");
-
-    int w;
-    scanf("%d", &w);
-    if(w == 1)
+    /*long long int msg_letra[tamanho];
+    for(i = 0; i < tamanho; i++)
     {
-      for(i = 0 ; i < tamanho ; i++)
-      {
-        printf("%c", a[i]);
-      }
-      printf("\n");
-    }
+        msg_letra[i] = atoll(msg_letras[i]);
+        printf("MSG LETRA %lld", msg_letra[i]);
+    }*/
+
+    
 }
 int main()
 {
@@ -241,7 +262,7 @@ int main()
 
     while (escolha != 4)
     {
-       printf("Escolha uma opção:\n\nDigite 1 para GERAR CHAVE PÚBLICA\nDigite 2 para ENCRIPTAR\nDigite 3 para DESENCRIPTAR\nDigite 4 para SAIR DO PROGRAMA\n");
+       printf("\nEscolha uma opção:\n\nDigite 1 para GERAR CHAVE PÚBLICA\nDigite 2 para ENCRIPTAR\nDigite 3 para DESENCRIPTAR\nDigite 4 para SAIR DO PROGRAMA\n");
        scanf("%d", &escolha);
 
        if(escolha == 1)
