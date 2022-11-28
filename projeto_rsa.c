@@ -155,7 +155,7 @@ void encriptografar()
     {
         cifrado[i] = conversao(frase,tamanho,i,0,e,n);
         //printf("ta cifrando isso:%lld\n", cifrado[i]);
-        fprintf(mensagens,"%lld", cifrado[i]);
+        fprintf(mensagens,"%lld ", cifrado[i]);
         i++;
     }    
 
@@ -199,14 +199,13 @@ void descriptografar()
     for(i = 0 ; i < tamanho ; i++)
     {
       mensagem[i] = inverso_modular(mensagem[i], d, p * q);
-      printf("esse é o inverso modular %lld", mensagem[i]);
+      
     }
 
     msg_descrip = fopen("mensagem_descriptografada.txt", "w");
-    for(i = 0 ; i < tamanho ; i++)
+    for(i = 0 ; i < tamanho -1  ; i++)
     {
       a[i] = alfabeto[mensagem[i]];
-      printf("conversao p letra: %c", a[i]);
       fprintf(msg_descrip, "%c", a[i]);
     }
     fclose(msg_descrip);
@@ -217,7 +216,7 @@ void descriptografar()
     scanf("%d", &w);
     if(w == 1)
     {
-      for(i = 0 ; i < tamanho ; i++)
+      for(i = 0 ; i < tamanho - 1; i++)
       {
         printf("%c", a[i]);
       }
